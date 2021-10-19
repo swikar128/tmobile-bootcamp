@@ -7,9 +7,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -43,10 +43,10 @@ public class LibraryController {
                 bookRepository.findByTitleContaining(title).forEach(books::add);
 
             if (books.isEmpty()) {
-                return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(new ArrayList<>(books), HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(books, HttpStatus.OK);
+            return new ResponseEntity<>(new ArrayList<>(books), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
