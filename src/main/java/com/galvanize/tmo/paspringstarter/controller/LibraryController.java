@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class LibraryController {
     @GetMapping("/api/books")
     public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title) {
         try {
-            ArrayList<Book> books = new ArrayList<>();
+            List<Book> books = new ArrayList<>();
 
             if (title == null)
                 bookRepository.findAll(Sort.by("title")).forEach(books::add);
@@ -42,7 +43,7 @@ public class LibraryController {
                 bookRepository.findByTitleContaining(title).forEach(books::add);
 
             if (books.isEmpty()) {
-                return new ResponseEntity<>(books, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NO_CONTENT);
             }
 
             return new ResponseEntity<>(books, HttpStatus.OK);
