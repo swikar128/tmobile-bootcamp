@@ -46,14 +46,14 @@ class LibraryControllerTest {
         book.setId(123L);
         book.setAuthor("JaneDoe");
         book.setTitle("Dr");
-        book.setYearPublished("Year Published");
+        book.setYearPublished(1);
         when(this.bookRepository.save((Book) any())).thenReturn(book);
 
         Book book1 = new Book();
         book1.setId(123L);
         book1.setAuthor("JaneDoe");
         book1.setTitle("Dr");
-        book1.setYearPublished("Year Published");
+        book1.setYearPublished(1);
         String content = (new ObjectMapper()).writeValueAsString(book1);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/books")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +64,7 @@ class LibraryControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"id\":123,\"author\":\"JaneDoe\",\"title\":\"Dr\",\"yearPublished\":\"Year Published\"}"));
+                        .string("{\"id\":123,\"author\":\"JaneDoe\",\"title\":\"Dr\",\"yearPublished\":1}"));
     }
 
     @Test
@@ -104,7 +104,7 @@ class LibraryControllerTest {
         book.setId(123L);
         book.setAuthor("JaneDoe");
         book.setTitle("Dr");
-        book.setYearPublished("?");
+        book.setYearPublished(0);
 
         ArrayList<Book> bookList = new ArrayList<Book>();
         bookList.add(book);
@@ -116,7 +116,7 @@ class LibraryControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
-                        .string("[{\"id\":123,\"author\":\"JaneDoe\",\"title\":\"Dr\",\"yearPublished\":\"?\"}]"));
+                        .string("[{\"id\":123,\"author\":\"JaneDoe\",\"title\":\"Dr\",\"yearPublished\":0}]"));
     }
 
     @Test
