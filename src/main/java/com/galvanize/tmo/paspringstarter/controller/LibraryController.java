@@ -42,7 +42,7 @@ public class LibraryController {
                 bookRepository.findByTitleContaining(title).forEach(books::add);
 
             if (books.isEmpty()) {
-                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(books, HttpStatus.NO_CONTENT);
             }
 
             return new ResponseEntity<>(books, HttpStatus.OK);
