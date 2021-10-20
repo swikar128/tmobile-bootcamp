@@ -5,6 +5,7 @@ import com.galvanize.tmo.paspringstarter.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -32,19 +33,12 @@ public class LibraryController {
         }
     }
 
-    @GetMapping("/api/books")
-    public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title) {
+    @GetMapping(value = "/api/books", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Book>> getAllBooks() {
         try {
             List<Book> books = new ArrayList<>();
 
-            if (title == null)
-                bookRepository.findAll(Sort.by("title")).forEach(books::add);
-            else
-                bookRepository.findByTitleContaining(title).forEach(books::add);
-
-            if (books.isEmpty()) {
-                return new ResponseEntity<>(new ArrayList<>(books), HttpStatus.NO_CONTENT);
-            }
+            bookRepository.findAll(Sort.by("title")).forEach(books::add);
 
             return new ResponseEntity<>(new ArrayList<>(books), HttpStatus.OK);
         } catch (Exception e) {
