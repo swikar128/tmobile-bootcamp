@@ -2,6 +2,7 @@ package com.galvanize.tmo.paspringstarter.controller;
 
 import com.galvanize.tmo.paspringstarter.model.Book;
 import com.galvanize.tmo.paspringstarter.repository.BookRepository;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -33,13 +34,16 @@ public class LibraryController {
     }
 
     @GetMapping(value = "/api/books", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public ResponseEntity<String> getAllBooks() {
+
+        Gson gson = new Gson();
+
         try {
             List<Book> books = new ArrayList<>();
 
             bookRepository.findAll(Sort.by("title")).forEach(books::add);
 
-            return new ResponseEntity<>(new ArrayList<>(books), HttpStatus.OK);
+            return new ResponseEntity<>(gson.toJson(books), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
