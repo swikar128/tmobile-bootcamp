@@ -1,7 +1,6 @@
 package com.galvanize.tmo.paspringstarter.controller;
 
 import com.galvanize.tmo.paspringstarter.model.Book;
-import com.galvanize.tmo.paspringstarter.model.BooksContainer;
 import com.galvanize.tmo.paspringstarter.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +33,13 @@ public class LibraryController {
     }
 
     @GetMapping(value = "/api/books", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<BooksContainer> getAllBooks() {
+    public ResponseEntity<List<Book>> getAllBooks() {
         try {
             List<Book> books = new ArrayList<>();
 
             bookRepository.findAll(Sort.by("title")).forEach(books::add);
 
-            BooksContainer booksContainer = new BooksContainer(books);
-            return new ResponseEntity<>(booksContainer, HttpStatus.OK);
+            return new ResponseEntity<>(new ArrayList<>(books), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
